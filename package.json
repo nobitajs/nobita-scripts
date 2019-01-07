@@ -1,0 +1,31 @@
+{
+  "name": "nobita-scripts",
+  "version": "0.0.1",
+  "description": "nobita-scripts",
+  "bin": {
+    "nobita-scripts": "./bin/nobita-scripts.js"
+  },
+  "dependencies": {
+    "download-git-repo": "1.0.2",
+    "inquirer": "6.0.0",
+    "commander": "2.16.0"
+  },
+  "repository": { 
+    "type" : "git", 
+    "url" : "https://github.com/iamtang/nobita.git"
+  },
+  "keywords": [
+    "koa",
+    "nobita-scripts",
+    "nobita"
+  ],
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/iamtang/nobita/issues",
+    "email": "303907720@qq.com"
+  },
+  "author": "JJ",
+  "license": "MIT"
+}

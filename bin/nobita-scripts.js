@@ -1,31 +1,26 @@
 #!/usr/bin/env node
 const program = require('commander');
 const cluster = require('cluster');
-const requireJS = require('nobita-require');
-const fs = require('fs');
-const path = require('path');
-const numCPUs = require('os').cpus().length;
-const cwd = process.cwd();
+const masterInit = require('../lib/master.js');
+const workerInit = require('../lib/worker.js');
 
 program
-	.version('0.0.1')
+	.version('0.0.3')
 	.option('-i [value]', '进程数')
+	.option('-c [value]', '入口文件路径')
 
 program
 	.command('prod')
 	.action(({ parent }) => {
-		const { I = 1 } = parent;
-		if (I == 'all') I = numCPUs;
 		if (cluster.isMaster) {
-			for (let i = 0; i < I; i++) {
-				cluster.fork();
-			}
+			masterInit(cluster, parent);
 		} else {
-			// const app = require('nobita');
-			requireJS('./app.js')
-			// console.log(requireJS('./app.js'), '------');
+			workerInit(cluster, parent);
 		}
 	});
 
 program.parse(process.argv);
+
+
+
 

@@ -1,17 +1,13 @@
 {
   "name": "nobita-scripts",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "nobita-scripts",
   "bin": {
     "nobita-scripts": "./bin/nobita-scripts.js"
   },
   "dependencies": {
-    "nobita-require": "0.0.2",
-    "commander": "2.16.0",
-    "cross-env": "^5.0.0",
-    "nodemon": "^1.18.9",
-    "pm2": "2.10.4",
-    "shelljs": "^0.8.3",
+    "nobita": "^0.9.17",
+    "commander": "2.16.0"
   },
   "repository": {
     "type": "git",

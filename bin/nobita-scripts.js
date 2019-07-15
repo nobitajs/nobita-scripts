@@ -3,43 +3,47 @@ const program = require('commander');
 const cluster = require('cluster');
 const Master = require('../lib/master.js');
 const Worker = require('../lib/worker.js');
-const path = require('path');
-const fs = require('fs');
-const pidPath = path.join(__dirname, '../pid.txt');
+const pid = require('../lib/pid.js');
+
 program
-	.version('0.0.5', '-v, --version')
+	.version('0.0.6', '-v, --version')
 	.option('-i [value]', '进程数')
-	.option('-c [value]', '入口文件路径')
 	.option('-e [value]', '运行环境')
 	.option('-n [value]', '应用名称')
 	.option('--silent [boolean]', '是否输出到控制台')
 
 
 program
-	.command('prod')
-	.action(({ parent }) => {
+	.command('prod <dir>')
+	.action((dir, { parent }) => {
+		const { N: title = 'app' } = parent;
 		if (cluster.isMaster) {
-			if (fs.existsSync(pidPath)) {
-				fs.writeFile(pidPath, process.pid, 'utf8', (err) => err && console.log(err));
-			} else {
-				fs.appendFileSync(pidPath, process.pid)
-			}
+			pid.set({ title, pid: process.pid })
 			new Master({ cluster, parent });
+
 		} else {
-			new Worker({ cluster, parent });
+			new Worker({ cluster, parent, dir });
 		}
 	});
 
 program
-	.command('stop')
-	.action(({ parent }) => {
-		console.log('[nobita-scripts] stopping nobita application');
-		const pid = parseInt(fs.readFileSync(path.join(__dirname, '../pid.txt'), 'utf8'));
-		if (pid && pid > 0) {
-			process.kill(pid, 'SIGHUP');
-		}
-	});
+	.command('stop <name>')
+	.action((name) => {
+		console.log(`[nobita-scripts] stopping nobita application name=${name}`);
+		let data = pid.get();
+		for (let id in data) {
+			if (data[id].title == name) {
+				pid.del(id);
+				try {
+					process.kill(id, 'SIGHUP');
+				} catch (error) {
 
+				}
+
+			}
+		}
+
+	});
 
 program.parse(process.argv);
 

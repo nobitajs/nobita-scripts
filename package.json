@@ -1,13 +1,14 @@
 {
   "name": "nobita-scripts",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "nobita-scripts",
   "bin": {
     "nobita-scripts": "./bin/nobita-scripts.js"
   },
   "dependencies": {
     "nobita": "^0.9.17",
-    "commander": "2.16.0"
+    "commander": "2.16.0",
+    "chokidar": "3.0.2"
   },
   "repository": {
     "type": "git",

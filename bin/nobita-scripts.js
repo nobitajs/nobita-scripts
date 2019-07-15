@@ -7,11 +7,12 @@ const path = require('path');
 const fs = require('fs');
 const pidPath = path.join(__dirname, '../pid.txt');
 program
-	.version('0.0.4', '-v, --version')
+	.version('0.0.5', '-v, --version')
 	.option('-i [value]', '进程数')
 	.option('-c [value]', '入口文件路径')
 	.option('-e [value]', '运行环境')
 	.option('-n [value]', '应用名称')
+	.option('--silent [boolean]', '是否输出到控制台')
 
 
 program

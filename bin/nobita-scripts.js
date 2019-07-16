@@ -8,12 +8,12 @@ const pid = require('../lib/pid.js');
 
 
 program
-	.version('0.0.7', '-v, --version')
+	.version('0.0.8', '-v, --version')
 	.option('-i [value]', '进程数')
 	.option('-e [value]', '运行环境')
 	.option('-n [value]', '应用名称')
 	.option('--silent [boolean]', '是否输出到控制台')
-
+	.option('--ignored [value]', '忽略文件')
 
 program
 	.command('prod <dir>')
@@ -23,6 +23,7 @@ program
 			pid.set({ title, pid: process.pid })
 			new Master({ cluster, parent });
 		} else {
+			
 			new Worker({ cluster, parent, dir });
 		}
 	});

@@ -8,7 +8,7 @@ const pid = require('../lib/pid.js');
 
 
 program
-	.version('0.0.8', '-v, --version')
+	.version('0.0.9', '-v, --version')
 	.option('-i [value]', '进程数')
 	.option('-e [value]', '运行环境')
 	.option('-n [value]', '应用名称')
@@ -16,7 +16,7 @@ program
 	.option('--ignored [value]', '忽略文件')
 
 program
-	.command('prod <dir>')
+	.command('prod [dir]')
 	.action((dir, { parent }) => {
 		const { N: title = 'app' } = parent;
 		if (cluster.isMaster) {
@@ -29,24 +29,23 @@ program
 	});
 
 program
-	.command('stop <name>')
+	.command('stop [name]')
 	.action((name) => {
 		console.log(`[nobita-scripts] stopping nobita application name=${name}`);
 		let data = pid.get();
 		for (let id in data) {
-			if (data[id].title == name) {
+			if (data[id].title == name || !name) {
 				pid.del(id);
 				try {
 					process.kill(id, 'SIGHUP');
 				} catch (error) {
-
 				}
 			}
 		}
 	});
 
 program
-	.command('local <dir>')
+	.command('local [dir]')
 	.action((dir = './app.js', { parent }) => {
 		if (cluster.isMaster) {
 			let worker = cluster.fork();
@@ -59,7 +58,3 @@ program
 	})
 
 program.parse(process.argv);
-
-
-
-

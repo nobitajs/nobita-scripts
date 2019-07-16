@@ -8,7 +8,7 @@ const pid = require('../lib/pid.js');
 
 
 program
-	.version('0.0.9', '-v, --version')
+	.version('0.1.0', '-v, --version')
 	.option('-i [value]', '进程数')
 	.option('-e [value]', '运行环境')
 	.option('-n [value]', '应用名称')

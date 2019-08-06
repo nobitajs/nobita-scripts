@@ -1,6 +1,6 @@
 {
   "name": "nobita-scripts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "nobita-scripts",
   "bin": {
     "nobita-scripts": "./bin/nobita-scripts.js"

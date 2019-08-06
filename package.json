@@ -1,6 +1,6 @@
 {
   "name": "nobita-scripts",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "nobita-scripts",
   "bin": {
     "nobita-scripts": "./bin/nobita-scripts.js"
@@ -9,7 +9,8 @@
     "nobita": "^0.9.17",
     "commander": "2.16.0",
     "chokidar": "3.0.2",
-    "nobita-require": "0.0.3"
+    "nobita-require": "0.0.3",
+    "runscript": "1.4.0"
   },
   "repository": {
     "type": "git",

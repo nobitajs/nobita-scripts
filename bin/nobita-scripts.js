@@ -6,9 +6,10 @@ const Master = require('../lib/master.js');
 const Worker = require('../lib/worker.js');
 const Local = require('../lib/local.js');
 const pid = require('../lib/pid.js');
+const { findPids, kill } = require('../lib/helper');
 
 program
-	.version('0.1.1', '-v, --version')
+	.version('0.1.2', '-v, --version')
 	.option('-i [value]', '进程数')
 	.option('-e [value]', '运行环境')
 	.option('-n [value]', '应用名称')
@@ -41,18 +42,14 @@ program
 
 program
 	.command('stop [name]')
-	.action((name) => {
-		console.log(`[nobita-scripts] stopping nobita application name=${name}`);
-		let data = pid.get();
-		for (let id in data) {
-			if (data[id].title == name || !name) {
-				pid.del(id);
-				try {
-					process.kill(id, 'SIGHUP');
-				} catch (error) {
-				}
-			}
-		}
+	.action(async (name) => {
+		const pids = await findPids((item) => {
+			const cmd = item.cmd;
+			return name ?
+				cmd.includes('nobita-scripts init') && cmd.includes(`-n ${name}`) :
+				cmd.includes('nobita-scripts init');
+		});
+		kill(pids);
 	});
 
 program

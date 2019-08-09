@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 const program = require('commander');
 const cluster = require('cluster');
-const { spawn } = require('child_process');
-const Master = require('../lib/master.js');
-const Worker = require('../lib/worker.js');
+const { spawn, fork } = require('child_process');
+const path = require('path');
 const Local = require('../lib/local.js');
-const pid = require('../lib/pid.js');
 const { findPids, kill } = require('../lib/helper');
 
 program
@@ -19,26 +17,21 @@ program
 program
 	.command('prod [dir]')
 	.action((dir, { parent }) => {
-		const rawArgs = parent.rawArgs.slice(3);
-		spawn('nobita-scripts', ['init', ...rawArgs], {
+		let args = { };
+		for (var i in parent) {
+			if (typeof parent[i] == 'string') {
+				args[i] = parent[i];
+			}
+		}
+		fork(path.join(__dirname, '../lib/init.js'), [JSON.stringify(args), dir], {
 			cwd: process.cwd(),
 			detached: !!parent.detached,
-			stdio: !!parent.detached ? 'ignore' : 'inherit'
+			stdio: !!parent.detached ? 'ignore' : 'inherit',
+			env: process.env
 		});
 		!!parent.detached && process.exit();
 	});
 
-program
-	.command('init [dir]')
-	.action((dir, { parent }) => {
-		const { N: title = 'app' } = parent;
-		if (cluster.isMaster) {
-			pid.set({ title, pid: process.pid })
-			new Master({ cluster, parent });
-		} else {
-			new Worker({ cluster, parent, dir });
-		}
-	});
 
 program
 	.command('stop [name]')
@@ -46,8 +39,8 @@ program
 		const pids = await findPids((item) => {
 			const cmd = item.cmd;
 			return name ?
-				cmd.includes('nobita-scripts init') && cmd.includes(`-n ${name}`) :
-				cmd.includes('nobita-scripts init');
+				cmd.includes(process.cwd()) && cmd.includes(`"N":"${name}"`) :
+				cmd.includes('nobita-scripts');
 		});
 		kill(pids);
 	});

@@ -33,14 +33,13 @@ program
 		!!parent.detached && process.exit();
 	});
 
-
 program
 	.command('stop [name]')
 	.action(async (name) => {
 		const pids = await findPids((item) => {
 			const cmd = item.cmd;
 			return name ?
-				cmd.includes(process.cwd()) && cmd.includes(`"N":"${name}"`) :
+				cmd.includes(process.cwd()) && cmd.includes(`title=${name}`) :
 				cmd.includes('nobita-scripts');
 		});
 		kill(pids);

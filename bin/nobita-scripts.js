@@ -17,12 +17,13 @@ program
 program
 	.command('prod [dir]')
 	.action((dir, { parent }) => {
-		let args = { };
+		let args = {};
 		for (var i in parent) {
 			if (typeof parent[i] == 'string') {
 				args[i] = parent[i];
 			}
 		}
+		process.title = 'master';
 		fork(path.join(__dirname, '../lib/init.js'), [JSON.stringify(args), dir], {
 			cwd: process.cwd(),
 			detached: !!parent.detached,

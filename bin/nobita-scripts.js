@@ -4,7 +4,7 @@ const cluster = require('cluster');
 const { spawn, fork } = require('child_process');
 const path = require('path');
 const Local = require('../lib/local.js');
-const { findPids, kill } = require('../lib/helper');
+const { findPids, kill, findProcessList, echoTable } = require('../lib/helper');
 
 program
 	.version('0.1.2', '-v, --version')
@@ -56,6 +56,19 @@ program
 		} else {
 			new Local({ dir, parent });
 		}
+	})
+
+program
+	.command('list [name]')
+	.action(async (name, { parent }) => {
+
+		const item = await findProcessList((item) => {
+			const args = item.args;
+			return name ?
+				args.includes('nobita-scripts') && args.includes('init.js') && args.includes(`title=${name}`) :
+				args.includes('nobita-scripts') && args.includes('init.js');
+		});
+		echoTable(item);
 	})
 
 program.parse(process.argv);

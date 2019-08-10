@@ -1,9 +1,9 @@
 {
   "name": "nobita-scripts",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "nobita-scripts",
   "bin": {
-    "nobita-scripts": "./bin/nobita-scripts.js"
+    "ns": "./bin/nobita-scripts.js"
   },
   "dependencies": {
     "nobita": "^0.9.17",
@@ -20,7 +20,8 @@
   "keywords": [
     "koa",
     "nobita-scripts",
-    "nobita"
+    "nobita",
+    "ns"
   ],
   "engines": {
     "node": ">=8.0.0"

@@ -1,13 +1,8 @@
 #!/usr/bin/env node
 const program = require('commander');
-const cluster = require('cluster');
-const { spawn, fork } = require('child_process');
-const path = require('path');
-const Local = require('../lib/local.js');
-const { findPids, kill, findProcessList, echoTable } = require('../lib/helper');
 
 program
-	.version('0.1.2', '-v, --version')
+	.version('0.2.2', '-v, --version')
 	.option('-i [value]', '进程数')
 	.option('-e [value]', '运行环境')
 	.option('-n [value]', '应用名称')
@@ -16,59 +11,18 @@ program
 
 program
 	.command('prod [dir]')
-	.action((dir, { parent }) => {
-		let args = {};
-		for (var i in parent) {
-			if (typeof parent[i] == 'string') {
-				args[i] = parent[i];
-			}
-		}
-		process.title = 'master';
-		fork(path.join(__dirname, '../lib/init.js'), [JSON.stringify(args), dir], {
-			cwd: process.cwd(),
-			detached: !!parent.detached,
-			stdio: !!parent.detached ? 'ignore' : 'inherit',
-			env: process.env
-		});
-		!!parent.detached && process.exit();
-	});
+	.action(require('../lib/cmd/prod'));
 
 program
 	.command('stop [name]')
-	.action(async (name) => {
-		const pids = await findPids((item) => {
-			const cmd = item.cmd;
-			return name ?
-				cmd.includes(process.cwd()) && cmd.includes(`title=${name}`) :
-				cmd.includes('nobita-scripts');
-		});
-		kill(pids);
-	});
+	.action(require('../lib/cmd/stop'));
 
 program
 	.command('local [dir]')
-	.action((dir = './app.js', { parent }) => {
-		if (cluster.isMaster) {
-			let worker = cluster.fork();
-			cluster.on('exit', () => {
-				worker = cluster.fork();
-			});
-		} else {
-			new Local({ dir, parent });
-		}
-	})
+	.action(require('../lib/cmd/local'))
 
 program
 	.command('list [name]')
-	.action(async (name, { parent }) => {
-
-		const item = await findProcessList((item) => {
-			const args = item.args;
-			return name ?
-				args.includes('nobita-scripts') && args.includes('init.js') && args.includes(`title=${name}`) :
-				args.includes('nobita-scripts') && args.includes('init.js');
-		});
-		echoTable(item);
-	})
+	.action(require('../lib/cmd/list'))
 
 program.parse(process.argv);

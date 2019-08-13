@@ -1,6 +1,6 @@
 {
   "name": "nobita-scripts",
-  "version": "0.2.8",
+  "version": "0.3.1",
   "description": "nobita-scripts",
   "bin": {
     "ns": "./bin/nobita-scripts.js"
@@ -12,7 +12,8 @@
     "nobita-require": "0.0.3",
     "runscript": "1.4.0",
     "word-table": "1.0.3",
-    "chalk": "2.4.2"
+    "chalk": "2.4.2",
+    "mz-modules": "2.1.0"
   },
   "repository": {
     "type": "git",

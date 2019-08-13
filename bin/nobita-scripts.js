@@ -10,8 +10,8 @@ program
 	.option('-d --detached [boolean]', '是否后台运行')
 
 program
-	.command('prod [dir]')
-	.action(require('../lib/cmd/prod'));
+	.command('start [dir]')
+	.action(require('../lib/cmd/start'));
 
 program
 	.command('stop [name]')

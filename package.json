@@ -1,6 +1,6 @@
 {
   "name": "nobita-scripts",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "nobita-scripts",
   "bin": {
     "ns": "./bin/nobita-scripts.js"
@@ -10,6 +10,7 @@
     "commander": "2.16.0",
     "chokidar": "3.0.2",
     "nobita-require": "0.0.3",
+    "nobita-readdir": "0.0.4",
     "runscript": "1.4.0",
     "word-table": "1.0.3",
     "chalk": "2.4.2",
